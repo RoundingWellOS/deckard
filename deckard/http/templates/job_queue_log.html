@@ -1,0 +1,5 @@
+<div class='log'>
+{%- if not log -%}&lt;No log entries&gt;{%- endif -%}
+{%- for entry in log -%}<div class="line{% if entry.startswith('[ERROR]') %} error{% endif %}">{% if entry == config.LOGGING_SEPARATOR_PLACEHOLDER %}<hr>{% else %}{{ entry }}{% endif %}</div>
+{% endfor -%}
+</div>

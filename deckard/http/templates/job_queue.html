@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block css %}
+{{ super() }}
+    <link href="/static/css/bootstrap-table.min.css" rel="stylesheet">
+{% endblock %}
+{% block templates %}
+    <script type="text/html" id="log_url_tmpl">
+        <a href="{{ url_for('job_queue_log', queued_job_id=99999) }}" data-toggle="modal" data-target="#logModal" class="view-log">View&nbsp;log</a>
+    </script>
+    <script type="text/html" id="git_ref_tmpl">
+        <%= row.git_ref_type %>:<%= row.git_ref %>
+    </script>
+    <script type="text/html" id="timestamp_tmpl">
+        <div><%= datestamp %></div>
+        <div><%= timestamp %></div>
+    </script>
+{% endblock %}
+{% block content %}
+<div>
+    <h1 class="pull-left">Job Queue</h1>
+    <div class="pull-right">
+        <div class="btn-group btn-refresh">
+            <button class="btn btn-default pull-right" type="button" id="btn-jobs-table-refresh" name="refresh" title="Refresh"><i class="glyphicon glyphicon-refresh icon-refresh"></i></button>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<div class="table-responsive">
+    <table id="jobs-table" class="table table-bordered">
+        <thead>
+            <tr class="info">
+                <th data-field="job_type">Type</th>
+                <th data-field="environment">Environment</th>
+                <th data-field="git_fork">Fork</th>
+                <th data-field="git_ref" data-formatter="job_queue.git_ref_formatter">Branch/Tag</th>
+                <th data-field="status">Status</th>
+                <th data-field="created_ts" data-formatter="job_queue.timestamp_formatter">Created</th>
+                <th data-field="finished_ts" data-formatter="job_queue.timestamp_formatter">Completed/Failed</th>
+                <th data-field="username">Deployer</th>
+                <th data-field="id" data-formatter="job_queue.log_url_formatter">Log</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="no-records-found">
+                <td colspan="10" style="text-align:center;"><span class="glyphicon glyphicon-refresh glyphicon-spin"></span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal fade" id="logModal" tabindex="-1" role="dialog" aria-labelledby="logModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block js %}
+<script type="text/javascript" data-main="/static/js/job_queue" src="/static/js/lib/require-2.1.16.min.js"></script>
+{% endblock %}

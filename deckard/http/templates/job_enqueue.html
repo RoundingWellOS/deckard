@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block templates %}
+    <script type="text/html" id="env_options_tmpl">
+        <option value="">Select one</option>
+        <% _.each(options, function(option) { %>
+        <option value="<%= option.job_id %>"><%= option.environment %></option>
+        <% }); %>
+    </script>
+
+    <script type="text/html" id="git_fork_options_tmpl">
+        <option value="">Select one</option>
+        <% _.each(forks, function(fork) { %>
+        <option value="<%= fork %>"><%= fork %></option>
+        <% }); %>
+    </script>
+
+    <script type="text/html" id="git_ref_options_tmpl">
+        <option value="">Select one</option>
+        <optgroup label="Branches">
+        <% if (_.isEmpty(branches)) { %>
+            <option value="" disabled>No branches</option>
+        <% }; %>
+        <% _.each(branches, function(branch) { %>
+            <option value="branch|<%= branch.sha %>|<%= branch.name %>"><%= branch.name %></option>
+        <% }); %>
+        </optgroup>
+        <optgroup label="Tags">
+        <% if (_.isEmpty(tags)) { %>
+            <option value="" disabled>No tags</option>
+        <% }; %>
+        <% _.each(tags, function(tag) { %>
+            <option value="tag|<%= tag.sha %>|<%= tag.name %>"><%= tag.name %></option>
+        <% }); %>
+        </optgroup>
+    </script>
+{% endblock %}
+{% block content %}
+<div>
+    <h1 class="pull-left">Enqueue Job</h1>
+    <div class="clearfix"></div>
+</div>
+<form id="job-enqueue-form">
+<div class="row">
+    <div class="col-sm-3">
+        <div id="job-type-panel" class="panel panel-danger">
+            <div class="panel-heading">
+                <h3 class="panel-title">Job Type</h3>
+            </div>
+            <div class="panel-body">
+                <select class="form-control input-lg" name='job_type'>
+                    <option value="">Select one</option>
+                    {% for job_type in job_types %}
+                    <option value="{{ job_type.id }}"{% if job_types|length == 1 %} selected{% endif %}>{{ job_type.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div id="environment-panel" class="panel panel-danger">
+            <div class="panel-heading">
+                <h3 class="panel-title">Environment</h3>
+            </div>
+            <div class="panel-body">
+                <select class="form-control input-lg" name='job_id' disabled>
+                    <option value="">Select one</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div id="git-fork-panel" class="panel panel-danger">
+            <div class="panel-heading">
+                <h3 class="panel-title">Fork</h3>
+            </div>
+            <div class="panel-body">
+                <select class="form-control input-lg" name='git_fork' disabled>
+                    <option value="">Select one</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div id="git-ref-panel" class="panel panel-danger">
+            <div class="panel-heading">
+                <h3 class="panel-title">Branch/Tag</h3>
+            </div>
+            <div class="panel-body">
+                <select class="form-control input-lg" name='git_ref' disabled>
+                    <option value="">Select one</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div id="job-enqueue-submit-btn" class="text-center">
+        <button type="submit" class="btn btn-default btn-xl disabled">Run the thing</button>
+    </div>
+</div>
+</form>
+
+{% endblock %}
+{% block js %}
+<script type="text/javascript" data-main="/static/js/job_enqueue" src="/static/js/lib/require-2.1.16.min.js"></script>
+{% endblock %}

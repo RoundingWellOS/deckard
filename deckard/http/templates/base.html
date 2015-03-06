@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Deckard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    {% block css %}
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="/static/css/deckard.css" rel="stylesheet">
+    {% endblock %}
+    {% block templates %}{% endblock %}
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar navbar-custom">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{{ url_for( 'home') }}">Deckard</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        {% if g.user %}
+                        <li {% if request.path == url_for( 'job_enqueue') %}class="active" {% endif %}><a href="{{ url_for( 'job_enqueue') }}">Enqueue Job</a></li>
+                        <li {% if request.path == url_for( 'job_queue') %}class="active" {% endif %}><a href="{{ url_for( 'job_queue') }}">Job Queue</a></li>
+                        {% endif %}
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                    {% if g.user %}
+                        <li><a>{{ g.user.github_name }}</a></li>
+                        <li><a href="{{ url_for( 'logout') }}"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
+                    {% else %}
+                        <li><a href="{{ url_for( 'login') }}">Login with GitHub</a></li>
+                    {% endif %}
+                    </ul>
+                    
+                </div>
+                <!--/.nav-collapse -->
+            </div>
+            <!--/.container-fluid -->
+        </nav>
+
+        <section>
+        {% block content %}
+            <div class="jumbotron">
+                <h2>You are not logged in</h2>
+            </div>
+        {% endblock %}
+        </section>
+    </div>
+    <!-- /container -->
+
+    {% block js %}{% endblock %}
+</body>
+
+</html>

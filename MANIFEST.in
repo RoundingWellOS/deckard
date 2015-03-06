@@ -1,0 +1,2 @@
+recursive-include deckard/http/templates *
+recursive-include deckard/http/static *
