@@ -11,7 +11,9 @@ import click
 import logging
 from sqlalchemy import select
 
+import os
 import time
+import signal
 import sys
 
 
@@ -46,8 +48,15 @@ class QueueManager(object):
         else:
             db_session.rollback()
 
+    def _handle_sigterm(self, signo, stackframe):
+        self.stop()
+
+    def _init_signal_handlers(self):
+        signal.signal(signal.SIGTERM, self._handle_sigterm)
+
     def run(self):
-        # Check pidfile
+        self._init_signal_handlers()
+        self._logger.info("Deckard Queue Manager: Started on %s.", os.getpid())
         try:
             while True:
                 job = self._next_job()
@@ -64,7 +73,7 @@ class QueueManager(object):
             self.stop()
 
     def stop(self):
-        self._logger.info("Closing things down.")
+        self._logger.info("Deckard Queue Manager: Closing things down.")
         sys.exit(0)
 
 

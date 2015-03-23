@@ -31,9 +31,8 @@ def pidfile(func):
         def remove_pid(*args, **kwargs):
             try:
                 func(*args, **kwargs)
-            except SystemExit:
+            finally:
                 os.unlink(pidfile_path)
-                raise
 
         return remove_pid(*args, **kwargs)
     return _decorator

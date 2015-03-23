@@ -114,5 +114,6 @@ class JobProcessor(object):
         except Exception, ex:
             self._logger.exception(ex)
             self._db.mark_failed()
+            raise
         finally:
             self._cleanup()
