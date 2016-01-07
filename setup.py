@@ -11,8 +11,8 @@ setup(
         'A task runner, package builder, deploy tool'
     ),
     long_description=long_description,
-    version='v0.5',
-    url='https://github.com/RoundingWell/deckard',
+    version='v0.6',
+    url='https://github.com/RoundingWellOS/deckard',
     author=u'Hernán Ciudad',
     author_email='hernan@roundingwell.com',
     packages=find_packages('.', exclude=['env']),
