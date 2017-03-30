@@ -103,11 +103,20 @@ class JobProcessor(object):
             if ex.errno != errno.ENOENT:
                 raise
 
+    def _notify_rollbar(self):
+            self._rollbar_token = os.environ.get('$ROLLBAR_TOKEN_SERVER')
+            self._rollbar_environ = self._db.job.environment
+            self._rollbar_revision = self._db.job.git_sha1
+            self._rollbar_user = self._db.job.username
+            self._rollbar_curl = "curl https://api.rollbar.com/api/1/deploy/ -F access_token="+self._rollbar_token+" -F environment="+self._rollbar_environ+" -F revision="+self._rollbar_revision+" -F local_username="+self._rollbar_username
+            os.system(self._rollbar_curl)
+
     def process(self):
         try:
             self._setup()
             self._download_archive()
             self._process_tasks()
+            self._notify_rollbar()
             self._db.mark_successful()
             self._logger.separator()
             self._log("Queued job %s is complete!", self._db.id)
