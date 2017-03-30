@@ -106,7 +106,7 @@ class JobProcessor(object):
     def _notify_rollbar(self):
             self._rollbar_token = os.environ.get('$ROLLBAR_TOKEN_SERVER')
             self._rollbar_environ = self._db.job.environment
-            self._rollbar_revision = self._db.job.git_sha1
+            self._rollbar_revision = self._db.git_sha1
             self._rollbar_user = self._db.job.username
             self._rollbar_curl = "curl https://api.rollbar.com/api/1/deploy/ -F access_token="+self._rollbar_token+" -F environment="+self._rollbar_environ+" -F revision="+self._rollbar_revision+" -F local_username="+self._rollbar_username
             os.system(self._rollbar_curl)
