@@ -10,6 +10,6 @@ A task runner, package builder, deploy tool
 create summarized and documented feature requests (preferably with the feature implemented in the pull request).
 
 
-===
+----
 
 This library is © 2016 RoundingWell. Distributed under MIT license.
